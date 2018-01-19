@@ -1,6 +1,10 @@
 ---
 - name: prep pkcs12 file
   copy: src="{{ test_pkcs12_path }}" dest="{{output_dir}}/{{ test_pkcs12_path }}"
+- name: prep cert1 file
+  copy: src="{{ test_cert1_path }}" dest="{{output_dir}}/{{ test_cert1_path }}"
+- name: prep cert2 file
+  copy: src="{{ test_cert2_path }}" dest="{{output_dir}}/{{ test_cert2_path }}"
 
 - name: import pkcs12
   local_action:
@@ -54,3 +58,11 @@
   assert:
     that:
     - result_excl_params is failed
+
+- name: test importing a certificate
+  local_action:
+    module: java_cert
+    cert_path: "{{output_dir}}/{{ test_cert1_path }}"
+    cert_alias: cert
+    keystore_path: "{{output_dir}}/{{ test_keystore_path }}"
+    
